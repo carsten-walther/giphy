@@ -1,0 +1,31 @@
+{
+	"name": "walther/giphy",
+	"type": "typo3-cms-extension",
+	"description": "Giphy to the masses.",
+	"keywords": [
+		"TYPO3",
+		"extension",
+		"giphy",
+		"gif"
+	],
+	"homepage": "https://carstenwalther.de",
+	"license": "GPL-3.0-or-later",
+	"require": {
+		"typo3/cms-core": "9.5.0-10.4.99"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "giphy"
+		}
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Walther\\Giphy\\" : "Classes/"
+		}
+	},
+	"minimum-stability" : "stable",
+	"authors" : [{
+		"name" : "Carsten Walther",
+		"email" : "walther.carsten@web.de"
+	}]
+}
