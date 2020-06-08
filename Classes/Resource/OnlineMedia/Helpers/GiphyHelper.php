@@ -20,7 +20,7 @@ class GiphyHelper extends AbstractOEmbedHelper
      *
      * @return \TYPO3\CMS\Core\Resource\File|null
      */
-    public function transformUrlToFile($url, Folder $targetFolder)
+    public function transformUrlToFile($url, Folder $targetFolder) : ?File
     {
         // Try to get the YouTube code from given url.
         // These formats are supported with and without http(s)://
@@ -64,6 +64,33 @@ class GiphyHelper extends AbstractOEmbedHelper
         }
 
         return $temporaryFileName;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Core\Resource\File $file
+     *
+     * @return array
+     */
+    public function getMetaData(File $file) : array
+    {
+        $metadata = [];
+
+        $oEmbed = $this->getOEmbedData($this->getOnlineMediaId($file));
+
+        if ($oEmbed) {
+            $metadata['width'] = (int)$oEmbed['width'];
+            $metadata['height'] = (int)$oEmbed['height'];
+            if (empty($file->getProperty('title'))) {
+                $metadata['title'] = strip_tags($oEmbed['title']);
+            }
+            $metadata['author'] = $oEmbed['author_name'];
+        } else {
+            [$width, $height] = getimagesize($this->getPublicUrl($file));
+            $metadata['width'] = (int)$width;
+            $metadata['height'] = (int)$height;
+        }
+
+        return $metadata;
     }
 
     /**

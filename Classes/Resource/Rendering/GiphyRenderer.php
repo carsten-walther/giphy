@@ -62,7 +62,6 @@ class GiphyRenderer implements FileRendererInterface
                 $this->onlineMediaHelper = false;
             }
         }
-
         return $this->onlineMediaHelper;
     }
 
@@ -111,7 +110,6 @@ class GiphyRenderer implements FileRendererInterface
     protected function createGiphyUrl(array $options, FileInterface $file) : string
     {
         $mediaId = $this->getMediaIdFromFile($file);
-
         return sprintf('https://media.giphy.com/media/%s/giphy.gif', $mediaId);
     }
 
@@ -127,7 +125,6 @@ class GiphyRenderer implements FileRendererInterface
         } else {
             $orgFile = $file;
         }
-
         return $this->getOnlineMediaHelper($file)->getOnlineMediaId($orgFile);
     }
 }

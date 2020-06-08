@@ -4,6 +4,7 @@ defined('TYPO3_MODE') or die();
 
 // Add giphy to allowed mediafile extensions
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext'] .= ',giphy';
+$GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'] .= ',giphy';
 
 // Add giphy helper
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fal']['onlineMediaHelpers']['giphy'] = \Walther\Giphy\Resource\OnlineMedia\Helpers\GiphyHelper::class;
