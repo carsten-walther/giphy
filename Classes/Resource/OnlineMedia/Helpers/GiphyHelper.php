@@ -1,6 +1,6 @@
 <?php
 
-namespace Walther\Giphy\Resource\OnlineMedia\Helpers;
+namespace CarstenWalther\Giphy\Resource\OnlineMedia\Helpers;
 
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
@@ -10,17 +10,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class GiphyHelper
  *
- * @package Walther\Giphy\Resource\OnlineMedia\Helpers
+ * @package CarstenWalther\Giphy\Resource\OnlineMedia\Helpers
  */
 class GiphyHelper extends AbstractOEmbedHelper
 {
     /**
-     * @param string                          $url
-     * @param \TYPO3\CMS\Core\Resource\Folder $targetFolder
+     * @param string $url
+     * @param Folder $targetFolder
      *
-     * @return \TYPO3\CMS\Core\Resource\File|null
+     * @return File|null
      */
-    public function transformUrlToFile($url, Folder $targetFolder) : ?File
+    public function transformUrlToFile($url, Folder $targetFolder): ?File
     {
         // Try to get the YouTube code from given url.
         // These formats are supported with and without http(s)://
@@ -46,11 +46,11 @@ class GiphyHelper extends AbstractOEmbedHelper
     }
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\File $file
+     * @param File $file
      *
      * @return string
      */
-    public function getPreviewImage(File $file) : string
+    public function getPreviewImage(File $file): string
     {
         $mediaId = $this->getOnlineMediaId($file);
         $temporaryFileName = $this->getTempFolderPath() . 'giphy_' . md5($mediaId) . '.jpg';
@@ -67,11 +67,11 @@ class GiphyHelper extends AbstractOEmbedHelper
     }
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\File $file
+     * @param File $file
      *
      * @return array
      */
-    public function getMetaData(File $file) : array
+    public function getMetaData(File $file): array
     {
         $metadata = [];
 
@@ -94,12 +94,12 @@ class GiphyHelper extends AbstractOEmbedHelper
     }
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\File $file
-     * @param bool                          $relativeToCurrentScript
+     * @param File $file
+     * @param bool $relativeToCurrentScript
      *
      * @return string|NULL
      */
-    public function getPublicUrl(File $file, $relativeToCurrentScript = false) : ?string
+    public function getPublicUrl(File $file, bool $relativeToCurrentScript = false): ?string
     {
         $mediaId = $this->getOnlineMediaId($file);
         return sprintf('https://media.giphy.com/media/%s/giphy.gif', $mediaId);
@@ -111,7 +111,7 @@ class GiphyHelper extends AbstractOEmbedHelper
      *
      * @return string
      */
-    protected function getOEmbedUrl($mediaId, $format = 'json') : string
+    protected function getOEmbedUrl($mediaId, $format = 'json'): string
     {
         return sprintf('https://media.giphy.com/media/%s/giphy.gif', $mediaId);
     }

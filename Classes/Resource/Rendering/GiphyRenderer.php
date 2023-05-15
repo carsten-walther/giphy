@@ -1,24 +1,26 @@
 <?php
 
-namespace Walther\Giphy\Resource\Rendering;
+namespace CarstenWalther\Giphy\Resource\Rendering;
 
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperInterface;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperRegistry;
 use TYPO3\CMS\Core\Resource\Rendering\FileRendererInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class GiphyRenderer
  *
- * @package Walther\Giphy\Resource\Rendering
+ * @package CarstenWalther\Giphy\Resource\Rendering
  */
 class GiphyRenderer implements FileRendererInterface
 {
     /**
-     * @var \TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperInterface
+     * @var bool|OnlineMediaHelperInterface
      */
-    protected $onlineMediaHelper;
+    protected OnlineMediaHelperInterface|bool $onlineMediaHelper = false;
 
     /**
      * Returns the priority of the renderer
@@ -29,35 +31,35 @@ class GiphyRenderer implements FileRendererInterface
      *
      * @return int
      */
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return 100;
     }
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\FileInterface $file
+     * @param FileInterface $file
      *
      * @return bool
      */
-    public function canRender(FileInterface $file) : bool
+    public function canRender(FileInterface $file): bool
     {
         return ($file->getMimeType() === 'image/giphy' || $file->getExtension() === 'giphy') && $this->getOnlineMediaHelper($file) !== false;
     }
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\FileInterface $file
+     * @param FileInterface $file
      *
-     * @return bool|\TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperInterface
+     * @return bool|OnlineMediaHelperInterface
      */
-    protected function getOnlineMediaHelper(FileInterface $file)
+    protected function getOnlineMediaHelper(FileInterface $file): bool|OnlineMediaHelperInterface
     {
-        if ($this->onlineMediaHelper === null) {
+        if (!$this->onlineMediaHelper) {
             $orgFile = $file;
             if ($orgFile instanceof FileReference) {
                 $orgFile = $orgFile->getOriginalFile();
             }
             if ($orgFile instanceof File) {
-                $this->onlineMediaHelper = OnlineMediaHelperRegistry::getInstance()->getOnlineMediaHelper($orgFile);
+                $this->onlineMediaHelper = GeneralUtility::makeInstance(OnlineMediaHelperRegistry::class)->getOnlineMediaHelper($orgFile);
             } else {
                 $this->onlineMediaHelper = false;
             }
@@ -66,16 +68,21 @@ class GiphyRenderer implements FileRendererInterface
     }
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\FileInterface $file
-     * @param int|string                             $width
-     * @param int|string                             $height
-     * @param array|null                             $options
-     * @param bool                                   $usedPathsRelativeToCurrentScript
+     * @param FileInterface $file
+     * @param int|string $width
+     * @param int|string $height
+     * @param array $options
+     * @param bool $usedPathsRelativeToCurrentScript
      *
      * @return string
      */
-    public function render(FileInterface $file, $width, $height, array $options = [], $usedPathsRelativeToCurrentScript = false) : string
-    {
+    public function render(
+        FileInterface $file,
+        $width,
+        $height,
+        array $options = [],
+        bool $usedPathsRelativeToCurrentScript = false
+    ): string {
         $options = $this->collectOptions($options, $file);
         $src = $this->createGiphyUrl($options, $file);
 
@@ -91,34 +98,34 @@ class GiphyRenderer implements FileRendererInterface
     }
 
     /**
-     * @param array                                  $options
-     * @param \TYPO3\CMS\Core\Resource\FileInterface $file
+     * @param array $options
+     * @param FileInterface $file
      *
      * @return array
      */
-    protected function collectOptions(array $options, FileInterface $file) : array
+    protected function collectOptions(array $options, FileInterface $file): array
     {
         return $options;
     }
 
     /**
-     * @param array                                  $options
-     * @param \TYPO3\CMS\Core\Resource\FileInterface $file
+     * @param array $options
+     * @param FileInterface $file
      *
      * @return string
      */
-    protected function createGiphyUrl(array $options, FileInterface $file) : string
+    protected function createGiphyUrl(array $options, FileInterface $file): string
     {
         $mediaId = $this->getMediaIdFromFile($file);
         return sprintf('https://media.giphy.com/media/%s/giphy.gif', $mediaId);
     }
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\FileInterface $file
+     * @param FileInterface $file
      *
      * @return string
      */
-    protected function getMediaIdFromFile(FileInterface $file) : string
+    protected function getMediaIdFromFile(FileInterface $file): string
     {
         if ($file instanceof FileReference) {
             $orgFile = $file->getOriginalFile();

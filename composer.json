@@ -1,5 +1,5 @@
 {
-	"name": "walther/giphy",
+	"name": "carsten-walther/giphy",
 	"type": "typo3-cms-extension",
 	"description": "Giphy to the masses.",
 	"keywords": [
@@ -11,7 +11,9 @@
 	"homepage": "https://carstenwalther.de",
 	"license": "GPL-3.0-or-later",
 	"require": {
-		"typo3/cms-core": "9.5.0-10.4.99"
+		"php": "^7.4 || ^8.1 || ^8.2",
+		"typo3/cms-core": "^10.4 || ^12.4",
+		"typo3/cms-extbase": "^10.4 || ^12.4"
 	},
 	"extra": {
 		"typo3/cms": {
@@ -20,7 +22,7 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Walther\\Giphy\\" : "Classes/"
+			"CarstenWalther\\Giphy\\" : "Classes/"
 		}
 	},
 	"minimum-stability" : "stable",
